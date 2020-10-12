@@ -11,10 +11,10 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-### Group Member 1: Your name here
-### Group Member 2: Your name here
-### Group Member 3: Your name here
-
+### Group Member 1: Gayatri Pai
+### Group Member 2: Natalee Morris
+### Group Member 3: Adam Duvall
+### Group Member 4: Spencer Segal
 
 
 ### 1. Preliminary: Set up your GitHub and Git. 
@@ -174,31 +174,40 @@ out$Y<-out$V1*B1+out$V2*B2+out$error
 
 **Question 1: Write a chunk in which you regress $Y$ on $V_1$ and $V_2$. Are your estimates of $\beta_1$ and $\beta_2$ biased?**
 
-**Answer:**
+**Answer:** 
+
+``` The equation is: lm(out$Y ~ out$V1+out$V2). The estimates are not biased because both variables are present. ```
 
 
 **Question 2: Write a chunk in which you regress $Y$ on $V_1$ only. Is your estimate of $\beta_1$ biased?**
 
-**Answer:**
+**Answer:** 
 
+``` The equation is: lm(out$Y ~ out$V1). The estimate is biased because only V1 is present; the weight of V2 is shifted onto V1. ```
 
 **Question 3: Generate a new variable $Y_{adj}$ such that $Y_{adj}=Y-\beta_2*V_2$. Then regress $Y_{adj}$ on $V_1$. Is your estimate of $\beta_1$ biased? Can you explain why/why not?**
 
-**Answer:**
+**Answer:** 
+
+``` The equation is: lm(Y_adj ~ out$V1), where Y_adj <- out$Y - B2*out$V2. 
+When rearranging the equation using Y_adj, the equation is the same as in question 1. This means there is no bias because both V1 and V2 are present. ```
 
 
 **Question 4: The code below generates a scatter plot and regression line for the relationship between $V_1$ and $Y$ as well as $V_1$ and $Y_{adj}$. Submit an improved visualization of this data. Hint: you will need to delete the # to get the code to run **
 
 ```{r key 4}
-#plotted<-ggplot(out, aes(V1, y = value, color = variable)) + 
-#    geom_point(aes(y = Y, col = "Y")) + 
-#    geom_point(aes(y = adjY, col = "adjY"))+
-#    geom_smooth(method='lm', aes(y = Y, col = "Y"))+
-#    geom_smooth(method='lm', aes(y = adjY, col = "Y"))
 
-#plotted
+Y_adj <- out$Y - B2*out$V2
+ plotted <- ggplot(out, aes(V1, y = value, color = variable)) + 
+  geom_point(aes(y = Y, col = "Y")) + geom_point(aes(y = Y_adj, col = "Y_adj")) +
+  geom_smooth(method='lm', aes(y = Y, col = "Y regression")) +
+  geom_smooth(method='lm',aes(y = Y_adj, col = "Y_adj regression"))
+
+plot(plotted)
 
 ```
+
+``` The new graph has more colors to make it easier to view (as seen through the legend). ```
 
 
 # Submission instructions:
