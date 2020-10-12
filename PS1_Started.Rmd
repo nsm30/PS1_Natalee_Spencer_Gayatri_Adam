@@ -136,11 +136,8 @@ When there are changes on in the GitHub repository that you want reflected on yo
 For this problem we are going to generate simulated data, with known characteristics, so that we can explore how the omission of a key variable biases our estimates.
 
 To do this in R markdown we must first tell R to interpret the text we write as code. We do this by embedding a code *chunk* in the document. The following is a code *chunk* that only consists of a comment. Notice the chunk starts and ends with three ` marks and is given in a name in brackets. 
-
-
 ```{r example}
 #This is a comment, alone in a chunk. 
-
 ```
 
 In the following chunk I generate simulated data consisting of two correlated variables
@@ -148,13 +145,11 @@ In the following chunk I generate simulated data consisting of two correlated va
 ```{r sim1}
 library(MASS)
 library(ggplot2)
-
 out <- as.data.frame(mvrnorm(1000, mu = c(0,0), 
                      Sigma = matrix(c(1,0.8,0.8,1), ncol = 2), 
                      empirical = TRUE))
 cor(out)
 plot(out)
-
 ```
 
 Next I generate a randomly distributed error term and I calculate the outcome variable which depends on both V1 and V2 and some noise:
@@ -163,11 +158,9 @@ $$Y=\beta_1V_1+\beta_2V_2+\epsilon$$
 
 ```{r sim2}
 out$error<-rnorm(1000, mean=0, sd=1)
-
 #The data generating process
 B1<-3
 B2<-6
-
 out$Y<-out$V1*B1+out$V2*B2+out$error
 ```
 
