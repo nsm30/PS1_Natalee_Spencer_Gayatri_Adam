@@ -11,9 +11,10 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-### Group Member 1: Spencer Segal
-### Group Member 2: Your name here
-### Group Member 3: Your name here
+### Group Member 1: Natalee Morris
+### Group Member 2: Spenceer Segal
+### Group Member 3: Gayatri Pai
+### Group Member 4: Adam Duvall
 
 
 
@@ -135,11 +136,8 @@ When there are changes on in the GitHub repository that you want reflected on yo
 For this problem we are going to generate simulated data, with known characteristics, so that we can explore how the omission of a key variable biases our estimates.
 
 To do this in R markdown we must first tell R to interpret the text we write as code. We do this by embedding a code *chunk* in the document. The following is a code *chunk* that only consists of a comment. Notice the chunk starts and ends with three ` marks and is given in a name in brackets. 
-
-
 ```{r example}
 #This is a comment, alone in a chunk. 
-
 ```
 
 In the following chunk I generate simulated data consisting of two correlated variables
@@ -147,13 +145,11 @@ In the following chunk I generate simulated data consisting of two correlated va
 ```{r sim1}
 library(MASS)
 library(ggplot2)
-
 out <- as.data.frame(mvrnorm(1000, mu = c(0,0), 
                      Sigma = matrix(c(1,0.8,0.8,1), ncol = 2), 
                      empirical = TRUE))
 cor(out)
 plot(out)
-
 ```
 
 Next I generate a randomly distributed error term and I calculate the outcome variable which depends on both V1 and V2 and some noise:
@@ -162,11 +158,9 @@ $$Y=\beta_1V_1+\beta_2V_2+\epsilon$$
 
 ```{r sim2}
 out$error<-rnorm(1000, mean=0, sd=1)
-
 #The data generating process
 B1<-3
 B2<-6
-
 out$Y<-out$V1*B1+out$V2*B2+out$error
 ```
 
@@ -176,53 +170,40 @@ out$Y<-out$V1*B1+out$V2*B2+out$error
 
 **Answer:**
 ```
-view(out)
-summary(out)
-lm(out$Y ~ out$V1 +out$V2 )
-plot(lm(out$Y ~ out$V1 +out$V2 ))
-
-This regression is not biased because both variables are represented in the regression equation above.
+lm(out$Y ~ out$V1 + out$V2)
+This regression is not biased because it incorporates both variables.  There is no variable omitted.
 ```
-
 **Question 2: Write a chunk in which you regress $Y$ on $V_1$ only. Is your estimate of $\beta_1$ biased?**
 
 **Answer:**
 ```
 lm(out$Y ~ out$V1)
-This regression is biased because it omitts V2 and distributes the wieght onto the V1 coefficient. Thus V1 is acting as an indirect proxy to V2.
-
+This regression is biased because it omits the V2 variable and distributes the weight of V2 onto the V1 variable.
 ```
 
 **Question 3: Generate a new variable $Y_{adj}$ such that $Y_{adj}=Y-\beta_2*V_2$. Then regress $Y_{adj}$ on $V_1$. Is your estimate of $\beta_1$ biased? Can you explain why/why not?**
 
 **Answer:**
-
 ```
-
-Y_Adjusted <- out$Y -B2*out$V2
-lm(formula = Y_Adjusted ~ out$V1)
-on the left y adjusted-b2v2 = b1v1 bc its telling us to regress on V1 so its not biased because we are getting the same expression as before. Becasue y adj includes b2V2 if you rearrange the equation you will get the original equation of Y =b1V1 +B2V2. There is no significant change in the coefficiant of V1 because V2 is present in the equation by being a part of Y_Adjusted.
-
-
+Y_adj <- out$Y-B2*out$V2
+lm(Y_adj ~ out$V1)
+The estimate of B1*V1 is not biased because ultimately the equation is still the same from question 1.  In this scenario we still have B2*V2 in the equation but it is located on the left side with Y.  This means that when the regression is run both V1 and V2 variables have the proper weight distributed amongst them resulting in non-biased coefficients. When comparing the V1 coefficient from question 1 and question 3 there is no significant difference.
 ```
 
 **Question 4: The code below generates a scatter plot and regression line for the relationship between $V_1$ and $Y$ as well as $V_1$ and $Y_{adj}$. Submit an improved visualization of this data. Hint: you will need to delete the # to get the code to run **
-```
-To improve this visualization, we changed the colors of the different entities. We made sure that the different regression lines were colored differently and to have it labeled on the legend. We also made Y and Y_Adjusted different colors to make their differences more apparent. They are also included in the legend.
-```
 
 ```{r key 4}
-Y_Adjusted <- out$Y-B2*out$V2
-
+Y_adj <- out$Y-B2*out$V2
 plotted<-ggplot(out, aes(V1, y = value, color = variable)) + 
-  geom_point(aes(y = Y, col = "Y")) + 
-  geom_point(aes(y = Y_Adjusted, col = "Y_Adjusted"))+
-  geom_smooth(method='lm', aes(y = Y, col = "reglineY"))+
-  geom_smooth(method='lm', aes(y = Y_Adjusted, col = "reglineY_Adjusted"))
+     geom_point(aes(y = Y, col = "Y")) + 
+     geom_point(aes(y = Y_adj, col = "Y_adj"))+
+     geom_smooth(method='lm', aes(y = Y, col = "reglineY"))+
+     geom_smooth(method='lm', aes(y = Y_adj, col = "reglineY_adj"))
 plot(plotted)
-
 ```
-
+```
+We distinguished the regression lines between  which changed the graph to refelct four different colors that represent the respected scatter plots and regression lines.
+```
 
 # Submission instructions:
 
