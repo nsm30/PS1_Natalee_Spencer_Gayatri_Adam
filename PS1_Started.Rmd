@@ -11,7 +11,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-### Group Member 1: Your name here
+### Group Member 1: Spencer Segal
 ### Group Member 2: Your name here
 ### Group Member 3: Your name here
 
@@ -175,28 +175,51 @@ out$Y<-out$V1*B1+out$V2*B2+out$error
 **Question 1: Write a chunk in which you regress $Y$ on $V_1$ and $V_2$. Are your estimates of $\beta_1$ and $\beta_2$ biased?**
 
 **Answer:**
+```
+view(out)
+summary(out)
+lm(out$Y ~ out$V1 +out$V2 )
+plot(lm(out$Y ~ out$V1 +out$V2 ))
 
+This regression is not biased because both variables are represented in the regression equation above.
+```
 
 **Question 2: Write a chunk in which you regress $Y$ on $V_1$ only. Is your estimate of $\beta_1$ biased?**
 
 **Answer:**
+```
+lm(out$Y ~ out$V1)
+This regression is biased because it omitts V2 and distributes the wieght onto the V1 coefficient. Thus V1 is acting as an indirect proxy to V2.
 
+```
 
 **Question 3: Generate a new variable $Y_{adj}$ such that $Y_{adj}=Y-\beta_2*V_2$. Then regress $Y_{adj}$ on $V_1$. Is your estimate of $\beta_1$ biased? Can you explain why/why not?**
 
 **Answer:**
 
+```
+
+Y_Adjusted <- out$Y -B2*out$V2
+lm(formula = Y_Adjusted ~ out$V1)
+on the left y adjusted-b2v2 = b1v1 bc its telling us to regress on V1 so its not biased because we are getting the same expression as before. Becasue y adj includes b2V2 if you rearrange the equation you will get the original equation of Y =b1V1 +B2V2. There is no significant change in the coefficiant of V1 because V2 is present in the equation by being a part of Y_Adjusted.
+
+
+```
 
 **Question 4: The code below generates a scatter plot and regression line for the relationship between $V_1$ and $Y$ as well as $V_1$ and $Y_{adj}$. Submit an improved visualization of this data. Hint: you will need to delete the # to get the code to run **
+```
+To improve this visualization, we changed the colors of the different entities. We made sure that the different regression lines were colored differently and to have it labeled on the legend. We also made Y and Y_Adjusted different colors to make their differences more apparent. They are also included in the legend.
+```
 
 ```{r key 4}
-#plotted<-ggplot(out, aes(V1, y = value, color = variable)) + 
-#    geom_point(aes(y = Y, col = "Y")) + 
-#    geom_point(aes(y = adjY, col = "adjY"))+
-#    geom_smooth(method='lm', aes(y = Y, col = "Y"))+
-#    geom_smooth(method='lm', aes(y = adjY, col = "Y"))
+Y_Adjusted <- out$Y-B2*out$V2
 
-#plotted
+plotted<-ggplot(out, aes(V1, y = value, color = variable)) + 
+  geom_point(aes(y = Y, col = "Y")) + 
+  geom_point(aes(y = Y_Adjusted, col = "Y_Adjusted"))+
+  geom_smooth(method='lm', aes(y = Y, col = "reglineY"))+
+  geom_smooth(method='lm', aes(y = Y_Adjusted, col = "reglineY_Adjusted"))
+plot(plotted)
 
 ```
 
