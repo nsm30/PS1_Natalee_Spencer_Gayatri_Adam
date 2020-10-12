@@ -11,9 +11,10 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-### Group Member 1: Your name here
-### Group Member 2: Your name here
-### Group Member 3: Your name here
+### Group Member 1: Natalee Morris
+### Group Member 2: Spenceer Segal
+### Group Member 3: Gayatri Pai
+### Group Member 4: Adam Duvall
 
 
 
@@ -175,31 +176,41 @@ out$Y<-out$V1*B1+out$V2*B2+out$error
 **Question 1: Write a chunk in which you regress $Y$ on $V_1$ and $V_2$. Are your estimates of $\beta_1$ and $\beta_2$ biased?**
 
 **Answer:**
-
-
+```
+lm(out$Y ~ out$V1 + out$V2)
+This regression is not biased because it incorporates both variables.  There is no variable omitted.
+```
 **Question 2: Write a chunk in which you regress $Y$ on $V_1$ only. Is your estimate of $\beta_1$ biased?**
 
 **Answer:**
-
+```
+lm(out$Y ~ out$V1)
+This regression is biased because it omits the V2 variable and distributes the weight of V2 onto the V1 variable.
+```
 
 **Question 3: Generate a new variable $Y_{adj}$ such that $Y_{adj}=Y-\beta_2*V_2$. Then regress $Y_{adj}$ on $V_1$. Is your estimate of $\beta_1$ biased? Can you explain why/why not?**
 
 **Answer:**
-
+```
+Y_adj <- out$Y-B2*out$V2
+lm(Y_adj ~ out$V1)
+The estimate of B1*V1 is not biased because ultimately the equation is still the same from question 1.  In this scenario we still have B2*V2 in the equation but it is located on the left side with Y.  This means that when the regression is run both V1 and V2 variables have the proper weight distributed amongst them resulting in non-biased coefficients. When comparing the V1 coefficient from question 1 and question 3 there is no significant difference.
+```
 
 **Question 4: The code below generates a scatter plot and regression line for the relationship between $V_1$ and $Y$ as well as $V_1$ and $Y_{adj}$. Submit an improved visualization of this data. Hint: you will need to delete the # to get the code to run **
 
 ```{r key 4}
-#plotted<-ggplot(out, aes(V1, y = value, color = variable)) + 
-#    geom_point(aes(y = Y, col = "Y")) + 
-#    geom_point(aes(y = adjY, col = "adjY"))+
-#    geom_smooth(method='lm', aes(y = Y, col = "Y"))+
-#    geom_smooth(method='lm', aes(y = adjY, col = "Y"))
-
-#plotted
-
+Y_adj <- out$Y-B2*out$V2
+plotted<-ggplot(out, aes(V1, y = value, color = variable)) + 
+     geom_point(aes(y = Y, col = "Y")) + 
+     geom_point(aes(y = Y_adj, col = "Y_adj"))+
+     geom_smooth(method='lm', aes(y = Y, col = "reglineY"))+
+     geom_smooth(method='lm', aes(y = Y_adj, col = "reglineY_adj"))
+plot(plotted)
 ```
-
+```
+We distinguished the regression lines between  which changed the graph to refelct four different colors that represent the respected scatter plots and regression lines.
+```
 
 # Submission instructions:
 
