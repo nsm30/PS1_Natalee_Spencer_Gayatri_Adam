@@ -4,16 +4,17 @@ author: "Claire Duquennois"
 date: "6/5/2020"
 output:
   html_document: default
-  word_document: default
   pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-### Group Member 1: Your name here
-### Group Member 2: Your name here
-### Group Member 3: Your name here
+### Group Member 1: Adam Duvall
+### Group Member 2: N/A
+### Group Member 3: N/A
+### Group Member 4: N/A
 
 
 
@@ -175,18 +176,23 @@ out$Y<-out$V1*B1+out$V2*B2+out$error
 **Question 1: Write a chunk in which you regress $Y$ on $V_1$ and $V_2$. Are your estimates of $\beta_1$ and $\beta_2$ biased?**
 
 **Answer:**
-
+```
+lm(out$Y ~ out$V1 +out$V2) Our estimates of B1 and B2 are not biased as both variables are represented in the original regression equation. 
+```
 
 **Question 2: Write a chunk in which you regress $Y$ on $V_1$ only. Is your estimate of $\beta_1$ biased?**
 
 **Answer:**
-
+```
+lm(formula = out$Y ~ out$V1) Our estimates are biased as our regression equation does not include our V2 or B2 variable, meaning that B1 variable will hold more weight in it's explanatory predictions than it would in a situation of appropriate weight for both V1 and V2.V1 therefore is acting as a proxy for V2.   
+```
 
 **Question 3: Generate a new variable $Y_{adj}$ such that $Y_{adj}=Y-\beta_2*V_2$. Then regress $Y_{adj}$ on $V_1$. Is your estimate of $\beta_1$ biased? Can you explain why/why not?**
 
 **Answer:**
-
-
+```
+Y_adj <- out$Y -B2*out$V2  lm(formula = Y_adj ~ out$V1)  As we are able to manipulate the given information to make Yadj equal our original equation from above question one, which includes B1V1 and B2V2, we are able to say that our estimate for B1 is not biased as both variables and their explanatory values of B1 and B2 are appropriately respresented. There is also no significant change between the coefficient for B1 from question 1 (2.988) and this question (2.977), further suggesting a lack of bias.  
+```
 **Question 4: The code below generates a scatter plot and regression line for the relationship between $V_1$ and $Y$ as well as $V_1$ and $Y_{adj}$. Submit an improved visualization of this data. Hint: you will need to delete the # to get the code to run **
 
 ```{r key 4}
@@ -201,12 +207,23 @@ out$Y<-out$V1*B1+out$V2*B2+out$error
 ```
 
 
+**Answer:**
+```{r key 5}
+Y_adj<-out$Y-B2*out$V2
+plotted<-ggplot(out, aes(V1, y = value, color = variable)) + 
+     geom_point(aes(y = Y, col = "Y")) + 
+     geom_point(aes(y = Y_adj, col = "Y_adj"))+
+     geom_smooth(method='lm', aes(y = Y, col = "regline"))+
+     geom_smooth(method='lm', aes(y = Y_adj, col = "regline")) 
+plot(plotted)
+
+```
+```
+The improved graph above forces our Y and Yadj varaibles to take colors that are different than the color of the regression lines, making the slopes of each regression more clear.  Our legend also now includes an indcator for the Y variable which was omitted from the original code.  
+```
 # Submission instructions:
 
 1) Make sure the final version of your assignment is uploaded on GitHub in both html and Rmarkdown format. 
 
 2) Knit your final version as a Word or Pdf document and submit this to Gradescope by the due date. 
-
-
-
 
